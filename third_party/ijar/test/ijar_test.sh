@@ -18,14 +18,6 @@
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 ## Inputs
-JAVAC=$1
-shift
-JAVA=$1
-shift
-JAR=$1
-shift
-JAVAP=$1
-shift
 IJAR=$1
 shift
 UNZIP=$1
@@ -34,6 +26,7 @@ ZIP=$1
 shift
 ZIP_COUNT=$1
 shift
+JAVATOOLS=$@
 
 ## Test framework
 source ${DIR}/testenv.sh || { echo "testenv.sh not found!" >&2; exit 1; }
@@ -43,6 +36,17 @@ function cleanup() {
 }
 
 trap cleanup EXIT
+
+function find_java_tool() {
+  for tool in ${JAVATOOLS}; do
+     case $tool in *$1) echo $(rlocation ${tool});; esac
+  done
+}
+
+JAVAC=$(find_java_tool "/bin/javac")
+JAVA=$(find_java_tool "/bin/java")
+JAR=$(find_java_tool "/bin/jar")
+JAVAP=$(find_java_tool "/bin/javap")
 
 ## Tools
 # Ensure that tooling path is absolute if not in PATH.

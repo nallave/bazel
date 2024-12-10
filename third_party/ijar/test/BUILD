@@ -9,15 +9,12 @@ sh_test(
     size = "enormous",
     srcs = ["ijar_test.sh"],
     args = [
-        "$(JAVABASE)/bin/javac",
-        "$(JAVABASE)/bin/java",
-        "$(JAVABASE)/bin/jar",
-        "$(JAVABASE)/bin/javap",
         "$(location //third_party/ijar)",
         # We assume unzip and zip to be on the path
         "unzip",
         "zip",
         "$(location :zip_count)",
+        "$(rlocationpaths @bazel_tools//tools/jdk:current_java_runtime)",
     ],
     data = [
         "//third_party/ijar",
